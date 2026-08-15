@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
+from werkzeug.security import generate_password_hash, check_password_hash
 import psycopg2
 import psycopg2.extras
 import os
@@ -10,6 +11,8 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 app = Flask("location")
+
+app.secret_key = os.environ.get("SECRET_KEY", "dev-only-fallback-change-this")
 
 def get_conn():
     return psycopg2.connect(DATABASE_URL)
@@ -27,6 +30,13 @@ def init_db():
             created_at TIMESTAMP NOT NULL DEFAULT NOW()
         )
     """)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            username TEXT UNIQUE NOT NULL,
+            password_hash TEXT NOT NULL
+        )
+    """)
     conn.commit()
     cur.close()
     conn.close()
@@ -42,6 +52,56 @@ def home():
     cur.close()
     conn.close()
     return render_template("index.html", memories=memories)
+
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        password_hash = generate_password_hash(password)
+
+        conn = get_conn()
+        cur = conn.cursor()
+        try:
+            cur.execute(
+                "INSERT INTO users (username, password_hash) VALUES (%s, %s)",
+                (username, password_hash)
+            )
+            conn.commit()
+        except psycopg2.errors.UniqueViolation:
+            conn.rollback()
+            cur.close()
+            conn.close()
+            return render_template("signup.html", error="That username is already taken.")
+        cur.close()
+        conn.close()
+
+        return redirect(url_for("login"))
+
+    return render_template("signup.html")
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        conn = get_conn()
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute("SELECT * FROM users WHERE username = %s", (username,))
+        user = cur.fetchone()
+        cur.close()
+        conn.close()
+
+        if user and check_password_hash(user["password_hash"], password):
+            session["user_id"] = user["id"]
+            session["username"] = user["username"]
+            return redirect(url_for("home"))
+        else:
+            return render_template("login.html", error="Invalid username or password.")
+
+    return render_template("login.html")
 
 @app.route("/add", methods=["GET", "POST"])
 def add():

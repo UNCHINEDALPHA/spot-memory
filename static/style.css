@@ -50,3 +50,49 @@ h1 {
     border-radius: 10px;
     font-weight: 600;
 }
+.fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #ff6b6b;
+    color: white;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(255,107,107,0.5);
+}
+
+form {
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+input[type="text"], input[type="file"] {
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: #1e1e30;
+    color: #eee;
+    font-size: 1rem;
+}
+
+button[type="submit"] {
+    padding: 14px;
+    border-radius: 10px;
+    background: #ff6b6b;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+button[type="submit"]:disabled {
+    background: #555;
+    color: #999;
+}
