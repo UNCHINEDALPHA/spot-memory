@@ -9,6 +9,23 @@ UPLOAD_FOLDER= os.path.join(BASE_DIR, "static", "uploads")
 
 app = Flask("location")
 
+def init_db():
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS memories (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            caption TEXT NOT NULL,
+            lat REAL NOT NULL,
+            lng REAL NOT NULL,
+            photo_path TEXT,
+            created_at TEXT NOT NULL
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+init_db() 
+
 @app.route("/")
 def home():
     conn= sqlite3.connect(DB_PATH)
@@ -43,22 +60,3 @@ def add():
         return redirect(url_for("home"))
 
     return render_template("add.html")
-
-def init_db():
-    conn = sqlite3.connect(DB_PATH)
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS memories (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            caption TEXT NOT NULL,
-            lat REAL NOT NULL,
-            lng REAL NOT NULL,
-            photo_path TEXT,
-            created_at TEXT NOT NULL
-        )
-    """)
-    conn.commit()
-    conn.close()
-
-if __name__ == "__main__":
-    init_db()
-    app.run(host="0.0.0.0", port=5000, debug=True)
