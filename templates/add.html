@@ -1,0 +1,24 @@
+<form method="POST" id="spot-form" enctype="multipart/form-data">
+    <input type="text" name="caption" placeholder="Caption" required>
+    <input type="text" name="lat" id="lat" placeholder="Latitude" readonly>
+    <input type="text" name="lng" id="lng" placeholder="Longitude" readonly>
+    <input type="file" name="photo" accept="image/*" capture="environment">
+    <button type="submit" id="save-btn" disabled>Save</button>
+</form>
+
+<p id="status">Getting your location...</p>
+
+<script>
+function onSuccess(position) {
+    document.getElementById("lat").value = position.coords.latitude;
+    document.getElementById("lng").value = position.coords.longitude;
+    document.getElementById("status").innerText = "Location found!";
+    document.getElementById("save-btn").disabled = false;
+}
+
+function onError(error) {
+    document.getElementById("status").innerText = "Couldn't get location: " + error.message;
+}
+
+navigator.geolocation.getCurrentPosition(onSuccess, onError);
+</script>

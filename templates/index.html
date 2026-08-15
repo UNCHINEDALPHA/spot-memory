@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spot Memory</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <h1>Spot Memory</h1>
+    <div class="memory-list">
+{% for m in memories %}
+    <div class="memory-card">
+        {% if m["photo_path"] %}
+            <img src="{{ url_for('static', filename='uploads/' + m['photo_path']) }}">
+        {% endif %}
+        <div class="content">
+            <div class="caption">{{ m["caption"] }}</div>
+            <div>({{ m["lat"] }}, {{ m["lng"] }})</div>
+            <a class="navigate-btn" href="https://www.google.com/maps/dir/?api=1&destination={{ m['lat'] }},{{ m['lng'] }}" target="_blank">🧭 Navigate</a>
+        </div>
+    </div>
+{% endfor %}
+</div>
+    <h2>Thankyou for using the platform<br>
+        creator: "HRSHIKESH. R. NAIR"
+    </h2>
+</body>
+</html>
