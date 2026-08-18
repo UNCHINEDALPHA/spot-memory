@@ -45,14 +45,16 @@ init_db()
 
 @app.route("/")
 def home():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
     conn = get_conn()
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    cur.execute("SELECT * FROM memories ORDER BY created_at DESC")
+    cur.execute("SELECT * FROM memories WHERE user_id = %s ORDER BY created_at DESC", (session["user_id"],))
     memories = cur.fetchall()
     cur.close()
     conn.close()
     return render_template("index.html", memories=memories)
-
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
@@ -105,6 +107,9 @@ def login():
 
 @app.route("/add", methods=["GET", "POST"])
 def add():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
     if request.method == "POST":
         caption = request.form.get("caption")
         lat = request.form.get("lat")
@@ -120,8 +125,8 @@ def add():
         conn = get_conn()
         cur = conn.cursor()
         cur.execute(
-            "INSERT INTO memories (caption, lat, lng, photo_path) VALUES (%s, %s, %s, %s)",
-            (caption, lat, lng, photo_path)
+            "INSERT INTO memories (user_id, caption, lat, lng, photo_path) VALUES (%s, %s, %s, %s, %s)",
+            (session["user_id"], caption, lat, lng, photo_path)
         )
         conn.commit()
         cur.close()
