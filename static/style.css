@@ -96,3 +96,35 @@ button[type="submit"]:disabled {
     background: #555;
     color: #999;
 }
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #14141f;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.nav-links{
+    display: flex;
+    gap: 15 px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.content-grid{
+    display:flex;
+    flex-direction: column;
+    padding: 15px;
+    gap: 15px;
+}
+
+.main-card .sidebar{
+    background-color: #1e1e30;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);;
+}
+
