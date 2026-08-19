@@ -1,4 +1,10 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spot Memory - Sign Up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
 
 {% if error %}
 <p style="color: #ff6b6b;">{{ error }}</p>
@@ -11,3 +17,6 @@
     <button type="submit">Sign Up</button>
 </form>
 <p>Already have an account? <a href="{{ url_for('login') }}" style="color:#ff6b6b;">Log in</a></p>
+
+</body>
+</html>

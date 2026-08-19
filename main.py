@@ -105,6 +105,11 @@ def login():
 
     return render_template("login.html")
 
+@app. route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
 @app.route("/add", methods=["GET", "POST"])
 def add():
     if "user_id" not in session:
