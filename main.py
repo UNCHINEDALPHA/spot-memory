@@ -141,5 +141,38 @@ def add():
 
     return render_template("add.html")
 
+@app.route("/delete/<int:memory_id>", methods=["POST"])
+def delete(memory_id):
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    conn = get_conn()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(
+        "SELECT photo_path FROM memories WHERE id = %s AND user_id = %s",
+        (memory_id, session["user_id"])
+    )
+    row = cur.fetchone()
+
+    if row is None:
+        cur.close()
+        conn.close()
+        return redirect(url_for("home"))
+
+    cur.execute(
+        "DELETE FROM memories WHERE id = %s AND user_id = %s",
+        (memory_id, session["user_id"])
+    )
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    if row["photo_path"]:
+        photo_full_path = os.path.join(UPLOAD_FOLDER, row["photo_path"])
+        if os.path.exists(photo_full_path):
+            os.remove(photo_full_path)
+
+    return redirect(url_for("home"))
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

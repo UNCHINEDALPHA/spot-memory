@@ -26,6 +26,12 @@
     </div>
 {% endfor %}
 </div>
+
+<a class="navigate-btn" href="https://www.google.com/maps/dir/?api=1&destination={{ m['lat'] }},{{ m['lng'] }}" target="_blank">🧭 Navigate</a>
+<form action="{{ url_for('delete', memory_id=m['id']) }}" method="POST" onsubmit="return confirm('Delete this memory? This cannot be undone.');">
+    <button type="submit" class="delete-btn">🗑 Delete</button>
+</form>
+
     <h2>Thankyou for using the platform
     </h2>
 
