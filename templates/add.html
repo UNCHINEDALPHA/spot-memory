@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spot Memory</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
 <form method="POST" id="spot-form" enctype="multipart/form-data">
@@ -24,3 +32,5 @@ function onError(error) {
 
 navigator.geolocation.getCurrentPosition(onSuccess, onError);
 </script>
+
+</html>
