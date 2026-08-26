@@ -4,6 +4,7 @@ import psycopg2
 import psycopg2.extras
 import os
 from werkzeug.utils import secure_filename
+from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
@@ -13,6 +14,7 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 app = Flask("location")
 
 app.secret_key = os.environ.get("SECRET_KEY", "dev-only-fallback-change-this")
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=3650)
 
 def get_conn():
     return psycopg2.connect(DATABASE_URL)
@@ -97,9 +99,10 @@ def login():
         conn.close()
 
         if user and check_password_hash(user["password_hash"], password):
-            session["user_id"] = user["id"]
-            session["username"] = user["username"]
-            return redirect(url_for("home"))
+         session.permanent = True
+         session["user_id"] = user["id"]
+         session["username"] = user["username"]
+         return redirect(url_for("home"))
         else:
             return render_template("login.html", error="Invalid username or password.")
 
