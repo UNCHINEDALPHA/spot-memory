@@ -105,7 +105,7 @@ button[type="submit"]:disabled {
 }
 
 .topbar a {
-    color: #ff6b6b;
+    color: #a716e0;
     text-decoration: none;
     font-weight: 600;
 }
@@ -126,8 +126,8 @@ button[type="submit"]:disabled {
     margin-top: 8px;
     padding: 10px 16px;
     background: transparent;
-    color: #ff6b6b;
-    border: 1px solid #ff6b6b;
+    color: #536185;
+    border: 1px solid #060505;
     border-radius: 10px;
     font-weight: 600;
     cursor: pointer;
