@@ -56,9 +56,9 @@ h1 {
     right: 24px;
     width: 60px;
     height: 60px;
-    border-radius: 50%;
-    background: #ff6b6b;
-    color: white;
+    border-radius: 60%;
+    background: #a13c3c;
+    color: rgb(139, 134, 134);
     font-size: 28px;
     display: flex;
     align-items: center;
